@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{6F2F33C8-9
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test.AutoFuelConcurrentQueue", "test\test.AutoFuelConcurrentQueue\test.AutoFuelConcurrentQueue.csproj", "{F3DB6E6D-721B-45B9-8B66-673B5C857699}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "documentation", "documentation", "{32C12EE3-37E8-49F4-B71C-2BF8A7327531}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

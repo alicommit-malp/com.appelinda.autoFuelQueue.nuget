@@ -1,7 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Title>Auto Fuel ConcurrentQueue</Title>
+    <Authors>Ali Tabryryz</Authors>
+    <Description>A concurrent queue which  knows how to fuel itself with fresh data</Description>
+    <Copyright>2019 Ali Tabryzy</Copyright>
+    <PackageProjectUrl>https://github.com/AliTabryzy/com.appelinda.autoFuelQueue.nuget</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/AliTabryzy/com.appelinda.autoFuelQueue.nuget/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/AliTabryzy/com.appelinda.autoFuelQueue.nuget</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+    <PackageTags>queue,concurrency,multithreading </PackageTags>
   </PropertyGroup>
 
 </Project>
