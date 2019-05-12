@@ -13,14 +13,27 @@ namespace AutoFuelConcurrentQueue
         private readonly SemaphoreSlim _signal = new SemaphoreSlim(0);
         private readonly IDataProvider<T> _dataProvider;
 
+        /// <summary>
+        /// Base class constructor
+        /// </summary>
         private AutoFuelConcurrentQueue()
         {
         }
 
+        /// <summary>
+        /// Base class constructor
+        /// </summary>
         private AutoFuelConcurrentQueue(IEnumerable<T> collection) : base(collection)
         {
         }
 
+        /// <summary>
+        /// Auto fuel constructor 
+        /// </summary>
+        /// <param name="poolSize">The size which the queue will attempt to get
+        /// new data if the count of the queue is lesser than this value</param>
+        /// <param name="dataProvider">A data provider object</param>
+        /// <param name="initialFueling">if false the queue will begin empty</param>
         public AutoFuelConcurrentQueue(int poolSize, IDataProvider<T> dataProvider
             ,bool initialFueling = true)
         {
@@ -30,6 +43,11 @@ namespace AutoFuelConcurrentQueue
             if (initialFueling) Fuel().Wait();
         }
 
+        /// <summary>
+        /// Will add an item T to the queue
+        /// </summary>
+        /// <param name="item"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public new void Enqueue(T item)
         {
             if (item == null) throw new ArgumentNullException(nameof(item));
@@ -37,12 +55,24 @@ namespace AutoFuelConcurrentQueue
             _signal.Release();
         }
 
+        /// <summary>
+        /// Add an item T to the queue without releasing the lock 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         private void _Enqueue(T item)
         {
             if (item == null) throw new ArgumentNullException(nameof(item));
             base.Enqueue(item);
         }
 
+        /// <summary>
+        /// try DeQueue an item T from the queue if the queue is empty it will try to fetch new data
+        /// if there is no more data returning from the data provider it will throw <exception cref="EndOfQueueException"></exception>
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns>An item T from the queue</returns>
+        /// <exception cref="EndOfQueueException"></exception>
         public async Task<T> DequeueAsync(CancellationToken cancellationToken)
         {
             await _signal.WaitAsync(cancellationToken);
@@ -56,7 +86,7 @@ namespace AutoFuelConcurrentQueue
             else
             {
                 await Fuel();
-                if (Count == 0) throw new AutoFuelConcurrentQueueTerminationException();
+                if (Count == 0) throw new EndOfQueueException();
                 TryDequeue(out result);
             }
 
@@ -64,6 +94,10 @@ namespace AutoFuelConcurrentQueue
         }
 
 
+        /// <summary>
+        /// This method will try to fetch "PoolSize-Count" number of data from the data provider 
+        /// </summary>
+        /// <returns></returns>
         private async Task Fuel()
         {
             var newData = await _dataProvider.GetNewData(_poolSize - Count);

@@ -5,6 +5,6 @@ namespace AutoFuelConcurrentQueue
 {
     public interface IDataProvider<T>
     {
-        Task<IEnumerable<T>> GetNewData(int limit);
+        Task<IEnumerable<T>> GetNewData(int count);
     }
 }

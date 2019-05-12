@@ -1,9 +1,24 @@
 using System;
+using System.Runtime.Serialization;
 
 namespace AutoFuelConcurrentQueue
 {
-    public class AutoFuelConcurrentQueueTerminationException : Exception
+    public class EndOfQueueException : Exception
     {
-        //todo add the methods 
+        public EndOfQueueException()
+        {
+        }
+
+        protected EndOfQueueException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
+
+        public EndOfQueueException(string message) : base(message)
+        {
+        }
+
+        public EndOfQueueException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
     }
 }
