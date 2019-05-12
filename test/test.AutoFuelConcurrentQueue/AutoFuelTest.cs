@@ -11,7 +11,7 @@ namespace test.AutoFuelConcurrentQueue
     {
         private AutoFuelConcurrentQueue<string> _autoFuelConcurrentQueue;
         private IDataProvider<string> _dataProvider;
-        private const int ThreadCount = 10;
+        private const int ThreadCount = 5;
 
         [SetUp]
         public void Setup()
@@ -37,7 +37,7 @@ namespace test.AutoFuelConcurrentQueue
                         {
                             var fullname = await _autoFuelConcurrentQueue
                                 .DequeueAsync(new CancellationTokenSource(20000).Token);
-                            Interlocked.Increment(ref dataCounter); 
+                            Interlocked.Increment(ref dataCounter);
                             Console.WriteLine($"{DateTime.Now:mm:ss.fff};Task_{i1};{fullname}");
                         }
                         catch (EndOfQueueException e)
