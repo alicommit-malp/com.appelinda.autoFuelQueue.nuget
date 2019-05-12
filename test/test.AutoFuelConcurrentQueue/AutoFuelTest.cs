@@ -40,20 +40,20 @@ namespace test.AutoFuelConcurrentQueue
                             Interlocked.Increment(ref dataCounter);
                             Console.WriteLine($"{DateTime.Now:mm:ss.fff};Task_{i1};{fullname}");
                         }
-                        catch (EndOfQueueException e)
+                        catch (EndOfQueueException)
                         {
+                            Console.WriteLine($"{DateTime.Now:mm:ss:fff};Task_{i1};end_of_queue");
                             break;
                         }
                     }
 
-                    Console.WriteLine($"{DateTime.Now:mm:ss:fff};Task_{i1};end_of_queue");
                     return Task.CompletedTask;
                 });
             }
 
             await Task.WhenAll(tasks);
 
-            if(MyDataProvider.DataCount!=dataCounter-1)
+            if (MyDataProvider.DataCount != dataCounter - 1)
                 Assert.Fail("Not all the data has been processed");
         }
     }
