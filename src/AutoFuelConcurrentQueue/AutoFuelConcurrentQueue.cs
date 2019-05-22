@@ -35,7 +35,7 @@ namespace AutoFuelConcurrentQueue
         /// <param name="dataProvider">A data provider object</param>
         /// <param name="initialFueling">if false the queue will begin empty</param>
         public AutoFuelConcurrentQueue(int poolSize, IDataProvider<T> dataProvider
-            ,bool initialFueling = true)
+            , bool initialFueling = true)
         {
             _poolSize = poolSize;
             _dataProvider = dataProvider;
@@ -66,6 +66,143 @@ namespace AutoFuelConcurrentQueue
             base.Enqueue(item);
         }
 
+
+        /// <summary>
+        /// try DeQueue an item T from the queue if the queue is empty it will try to fetch new data
+        /// if there is no more data returning from the data provider it will throw <exception cref="EndOfQueueException"></exception>
+        /// </summary>
+        /// <returns>An item T from the queue</returns>
+        /// <exception cref="EndOfQueueException"></exception>
+        public async Task<T> DequeueAsync()
+        {
+            await _signal.WaitAsync();
+
+            T result;
+            if (Count > 0)
+            {
+                TryDequeue(out result);
+                _signal.Release();
+            }
+            else
+            {
+                await Fuel();
+                if (Count == 0) throw new EndOfQueueException();
+                TryDequeue(out result);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// try DeQueue an item T from the queue if the queue is empty it will try to fetch new data
+        /// if there is no more data returning from the data provider it will throw <exception cref="EndOfQueueException"></exception>
+        /// </summary>
+        /// <param name="timeSpan"></param>
+        /// <returns>An item T from the queue</returns>
+        /// <exception cref="EndOfQueueException"></exception>
+        public async Task<T> DequeueAsync(TimeSpan timeSpan)
+        {
+            await _signal.WaitAsync(timeSpan);
+
+            T result;
+            if (Count > 0)
+            {
+                TryDequeue(out result);
+                _signal.Release();
+            }
+            else
+            {
+                await Fuel();
+                if (Count == 0) throw new EndOfQueueException();
+                TryDequeue(out result);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// try DeQueue an item T from the queue if the queue is empty it will try to fetch new data
+        /// if there is no more data returning from the data provider it will throw <exception cref="EndOfQueueException"></exception>
+        /// </summary>
+        /// <param name="milliseconds"></param>
+        /// <returns>An item T from the queue</returns>
+        /// <exception cref="EndOfQueueException"></exception>
+        public async Task<T> DequeueAsync(int milliseconds)
+        {
+            await _signal.WaitAsync(milliseconds);
+
+            T result;
+            if (Count > 0)
+            {
+                TryDequeue(out result);
+                _signal.Release();
+            }
+            else
+            {
+                await Fuel();
+                if (Count == 0) throw new EndOfQueueException();
+                TryDequeue(out result);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// try DeQueue an item T from the queue if the queue is empty it will try to fetch new data
+        /// if there is no more data returning from the data provider it will throw <exception cref="EndOfQueueException"></exception>
+        /// </summary>
+        /// <param name="milliseconds"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>An item T from the queue</returns>
+        /// <exception cref="EndOfQueueException"></exception>
+        public async Task<T> DequeueAsync(int milliseconds, CancellationToken cancellationToken)
+        {
+            await _signal.WaitAsync(milliseconds, cancellationToken);
+
+            T result;
+            if (Count > 0)
+            {
+                TryDequeue(out result);
+                _signal.Release();
+            }
+            else
+            {
+                await Fuel();
+                if (Count == 0) throw new EndOfQueueException();
+                TryDequeue(out result);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// try DeQueue an item T from the queue if the queue is empty it will try to fetch new data
+        /// if there is no more data returning from the data provider it will throw <exception cref="EndOfQueueException"></exception>
+        /// </summary>
+        /// <param name="timeSpan"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>An item T from the queue</returns>
+        /// <exception cref="EndOfQueueException"></exception>
+        public async Task<T> DequeueAsync(TimeSpan timeSpan, CancellationToken cancellationToken)
+        {
+            await _signal.WaitAsync(timeSpan, cancellationToken);
+
+            T result;
+            if (Count > 0)
+            {
+                TryDequeue(out result);
+                _signal.Release();
+            }
+            else
+            {
+                await Fuel();
+                if (Count == 0) throw new EndOfQueueException();
+                TryDequeue(out result);
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// try DeQueue an item T from the queue if the queue is empty it will try to fetch new data
         /// if there is no more data returning from the data provider it will throw <exception cref="EndOfQueueException"></exception>
@@ -78,7 +215,7 @@ namespace AutoFuelConcurrentQueue
             await _signal.WaitAsync(cancellationToken);
 
             T result;
-            if (Count >0)
+            if (Count > 0)
             {
                 TryDequeue(out result);
                 _signal.Release();
