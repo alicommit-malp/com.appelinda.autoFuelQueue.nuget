@@ -25,7 +25,7 @@ namespace test.AutoFuelConcurrentQueue
         public async Task<IEnumerable<string>> GetNewData(int count)
         {
             await Task.Delay(0);
-                
+
             //get limit number of new data
             var result = _data.AsQueryable().Skip(_consumedCount).Take(count);
             _consumedCount += count;
