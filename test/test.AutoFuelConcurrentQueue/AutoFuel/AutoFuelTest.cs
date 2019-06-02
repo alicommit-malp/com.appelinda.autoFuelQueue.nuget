@@ -1,8 +1,6 @@
 using System;
-<<<<<<< HEAD:test/test.AutoFuelConcurrentQueue/AutoFuelTest.cs
-=======
+using System.Collections.Generic;
 using System.Diagnostics;
->>>>>>> e09193f32e00b33644967d23217e1debfb5a9b1f:test/test.AutoFuelConcurrentQueue/AutoFuel/AutoFuelTest.cs
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFuelConcurrentQueue;
@@ -29,7 +27,7 @@ namespace test.AutoFuelConcurrentQueue.AutoFuel
         {
             var sw = new Stopwatch();
             sw.Start();
-            
+
             var dataCounter = 0;
             var tasks = new Task[TaskCount];
             for (var i = 0; i < TaskCount; i++)
